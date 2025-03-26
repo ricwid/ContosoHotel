@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<!--
+	Aerial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>{% block title %}{% endblock %}</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/main.css') }}" />
+		<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/chatbubbles.css') }}" />
+		<noscript><link rel="stylesheet" href="{{ url_for('static', filename='assets/css/noscript.css') }}" /></noscript>
+		<link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon/apple-touch-icon.png') }}">
+		<link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicons/favicon.ico') }}" />
+		<link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicons/favicon-32x32.png') }}">
+		<link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicons/favicon-16x16.png') }}">
+		<link rel="manifest" href="{{ url_for('static', filename='favicons/site.webmanifest') }}">
+		{% if config.chatbot_baseurl %}
+		<script type="module" src="https://cdn.jsdelivr.net/npm/zero-md@3?register"></script>
+		{% endif %}
+	</head>
+	<body class="is-preload">
+		<div id="wrapper">
+			<div id="bg"></div>
+			<div id="overlay"></div>
+			<div id="main">
+
+				<!-- Header -->
+					<header id="header">
+                        {% block headingcontent %}
+                        {% endblock %}
+					</header>
+
+					<article id="article">
+						{% block content %}
+						{% endblock %}
+					</article>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<span class="copyright">a python web app demo</span>
+					</footer>
+
+			</div>
+		</div>
+		<script>
+			window.onload = function() { document.body.classList.remove('is-preload'); }
+			window.ontouchmove = function() { return false; }
+			window.onorientationchange = function() { document.body.scrollTop = 0; }
+		</script>
+		<script>
+			window.getContosoUrl = function(base_url, path) {
+				if (base_url.endsWith('/')) {
+					base_url = base_url.slice(0, -1);
+				}
+				if (path.startsWith('/')) {
+					path = path.slice(1);
+				}
+				return base_url + '/' + path;
+			};
+			window.contoso_configuration = {
+				api_baseurl: JSON.parse('{% if config.api_baseurl is string %}{{ config.api_baseurl | tojson }}{% else %}""{% endif %}'),
+				chatbot_baseurl: JSON.parse('{% if config.chatbot_baseurl is string %}{{ config.chatbot_baseurl | tojson }}{% else %}""{% endif %}'),
+				chatbot_frontend_use_chatbot_baseurl: JSON.parse('{% if config.chatbot_frontend_use_chatbot_baseurl is true %}true{% else %}false{% endif %}')
+			};
+		</script>
+		{% if config.chatbot_baseurl %}
+		<div id="chatbotLogo">
+			<i class="fa-solid fa-robot"></i>
+		</div>
+		<div id="chatbotBar" class="closed">
+			<div class="chat-topbar"><div class="closebtn" id="chatbotClose"><i class="fa-solid fa-xmark"></i></div></div>
+			<div class="chat-content" id="chatbotContent">
+			</div>
+			<div class="chat-bottombar">
+				<div class="sendmsg">
+					<input type="text" id="chatbotInput" placeholder="Type a message..." />
+				</div>
+				<div id="chatbotSubmit" class="sendbtn"><i class="fa-regular fa-paper-plane"></i></div>
+			</div>
+		</div>
+		<script src="{{ url_for('static', filename='assets/js/chatbot.js') }}"></script>
+		{% endif %}
+		{% block bottomloadscript %}
+		{% endblock %}
+	</body>
+</html>

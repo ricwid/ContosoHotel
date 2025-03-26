@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block title %}
+Contoso Hotel Bookings
+{% endblock %}
+{% block headingcontent %}
+<h1>Contoso Hotel Bookings</h1>
+{% endblock %}
+{% block content %}
+<button class="button3d" role="button" id="newbooking">New Booking</button>
+
+<br><br>
+<input type="text" id="search" placeholder="Search" style="width: 100%;">
+<br><br>
+<div id="bookinglist"></div>
+{% endblock %}
+
+{% block bottomloadscript %}
+<script src="{{ url_for('static', filename='assets/js/booking.js') }}"></script>
+<script type="text/javascript">
+document.getElementById("newbooking").onclick = function() {
+    window.location.href = "{{ url_for('create') }}";
+};
+</script>
+
+<script>
+async function runLongRequests() {
+    while(true) {
+        console.log("Running long requests");
+        try {
+            await fetch(window.getContosoUrl(window.contoso_configuration.api_baseurl, '/api/longsqlrequest')).then(response => response.json());
+        }
+        catch (e) {
+            console.error(e);
+        }
+        console.log("Done Running long requests");
+        await new Promise(r => setTimeout(r, 1000));
+    }
+}
+// comment this line to stop long requests
+runLongRequests();
+</script>
+{% endblock %}
